@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Happy Birthday, Meh Devi Ji! 💗</title>
+<meta name="description" content="A personal birthday surprise for Meh Devi Ji - 7 September 🎂"/>
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/css/lightgallery.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<canvas id="sakura-canvas"></canvas>
+<div id="cursor"></div>
+<div id="cursor-trail"></div>
+<div class="sparkle-container" id="sparkle-container"></div>
+<div class="floating-hearts-bg" id="floating-hearts-bg"></div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" role="dialog" aria-modal="true">
+  <button id="lightbox-close" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt=""/>
+  <div class="lightbox-caption" id="lightbox-caption"></div>
+</div>
+
+<!-- CELEBRATION -->
+<div id="celebration" role="dialog" aria-modal="true">
+  <div class="celebration-emojis">🎉🎂🎊</div>
+  <div class="celebration-title">Happy Birthday,<br/>Meh Devi Ji! 💗</div>
+  <div class="celebration-emojis">🌸✨🌷</div>
+  <div class="celebration-msg">May your day be filled with joy, laughter, and all the love you deserve. You are truly one in a million. 💗</div>
+  <button class="btn-close-celebration" id="close-celebration-btn">💌 Thank you!</button>
+</div>
+
+<!-- AUDIO PLAYER -->
+<audio id="bg-audio" loop>
+  <source src="bg.mp3" type="audio/mpeg">
+</audio>
+<button id="audio-toggle" class="audio-btn" aria-label="Toggle Audio">🔇</button>
+
+<button id="scroll-top" aria-label="Scroll to top">↑</button>
+
+<!-- HERO -->
+<header class="hero-section" id="hero">
+  <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
+    <span class="hero-flower">🌸</span>
+    <h1 class="hero-title">Happy Birthday,<br/>Meh Devi Ji! 💗</h1>
+    <p class="hero-sub">Celebrating a wonderful person who makes the world bloom 🌷</p>
+    <div class="age-counter">
+      <div class="age-label">✨ She has been making the world beautiful for... ✨</div>
+      <div id="age-display" class="age-display">Loading...</div>
+    </div>
+    <div class="hero-sparkles">✨ 💗 ✨ 🌸 ✨</div>
+  </div>
+</header>
+
+<!-- COUNTDOWN -->
+<section class="section" id="birthday" data-aos="fade-up">
+  <div class="date-badge">🎂 &nbsp; 7 September &nbsp; 🎂</div>
+  <h2 class="birthday-title">The Day You Arrived 🎉</h2>
+  <p class="birthday-sub">The day a very special person came into this world.<br/>And the world has been brighter ever since. 🌸 🦋</p>
+  <div id="countdown-section" class="countdown-wrapper">
+    <p class="countdown-label">✨ Counting down to your special day... ✨</p>
+    <div class="countdown-boxes">
+      <div class="countdown-box"><span class="countdown-num" id="cd-days">00</span><span class="countdown-unit">Days</span></div>
+      <div class="countdown-box"><span class="countdown-num" id="cd-hours">00</span><span class="countdown-unit">Hours</span></div>
+      <div class="countdown-box"><span class="countdown-num" id="cd-mins">00</span><span class="countdown-unit">Minutes</span></div>
+      <div class="countdown-box"><span class="countdown-num" id="cd-secs">00</span><span class="countdown-unit">Seconds</span></div>
+    </div>
+  </div>
+  <div id="bday-today" class="bday-celebration" style="display:none">
+    <span class="bday-big-emoji">🎂</span>
+    <div style="font-family:var(--fh);font-size:clamp(26px,5vw,42px);color:var(--p6);margin-top:14px">Today is your day, Meh Devi Ji! 🌸</div>
+    <div class="cake-row">🎈 🎊 🎉 🌸 💗 🌷 🎀 ✨</div>
+  </div>
+  <span class="ldeco" style="top:5%;left:5%;font-size:32px;animation-delay:.5s">💗</span>
+  <span class="ldeco" style="bottom:5%;right:5%;font-size:28px;animation-delay:1.2s">🌸</span>
+  <span class="ldeco" style="top:15%;right:3%;font-size:24px;animation-delay:.8s">✨</span>
+  <span class="ldeco" style="bottom:15%;left:3%;font-size:26px;animation-delay:1.7s">🎂</span>
+</section>
+
+<div class="wave-div"><svg viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="#fff0f5"/></svg></div>
+
+<!-- FILMSTRIP -->
+<section id="filmstrip" data-aos="fade-up">
+  <div class="section-title">Through the Lens 🎞️</div>
+  <div class="section-sub">Beautiful moments, frozen in time just for you</div>
+  <div class="filmstrip-track" id="filmstrip-track"></div>
+  <p class="swipe-hint">← Swipe to explore →</p>
+</section>
+
+<div class="wave-div" style="transform:rotate(180deg)"><svg viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="#ede9fe"/></svg></div>
+
+
+
+<!-- SCRAPBOOK -->
+<section id="scrapbook" data-aos="fade-up">
+  <div class="heading-deco"><div class="heading-line"></div><span>🌸</span><div class="heading-line"></div></div>
+  <div class="section-title">A Scrapbook of You 🎀</div>
+  <div class="section-sub">Collected memories, stitched together with love</div>
+  <span class="sticker" style="top:30px;right:40px;transform:rotate(15deg)">🌸</span>
+  <span class="sticker" style="top:60px;left:30px;transform:rotate(-10deg)">⭐</span>
+  <span class="sticker" style="bottom:60px;right:60px;transform:rotate(8deg)">🦋</span>
+  <span class="sticker" style="bottom:40px;left:40px;transform:rotate(-15deg)">💗</span>
+  <div class="scrapbook-grid" id="scrapbook-grid"></div>
+</section>
+
+<div class="wave-div" style="transform:rotate(180deg)"><svg viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="#fff9fb"/></svg></div>
+
+<!-- MESSAGE -->
+<section class="section" id="message" data-aos="fade-up">
+  <div class="letter-wrapper">
+    <div class="letter-lines"></div>
+    <div class="letter-icon">💌</div>
+    <div class="letter-header">A Little Message For You 💌</div>
+    <div class="letter-text">
+      <p>Dear Meh Devi Ji,</p>
+      <p>Words could never quite capture how wonderful you truly are — but someone out there wanted to try anyway. 💗</p>
+      <p>You have this rare, beautiful quality of making everyone around you feel seen, warm, and a little bit more at home in the world. That’s not something everyone has. But you do. 🌸</p>
+      <p>On this day — your birthday — I hope you feel every bit as special as you make others feel. I hope your heart is full, your smile is wide, and your day feels like a little bit of magic. ✨</p>
+      <p>You deserve every good thing this world has to offer. Every flower. Every laugh. Every moment of joy. All of it, and more. 🌷</p>
+      <p>Happy Birthday, beautiful soul. 🎂</p>
+      <div class="letter-signature">With all the love 💗<br/>Always yours 🌸</div>
+    </div>
+    <div class="letter-wax">💌</div>
+  </div>
+</section>
+
+<div class="wave-div"><svg viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="#ede9fe"/></svg></div>
+
+<!-- GALLERY -->
+<section class="section" id="memories" data-aos="fade-up">
+  <div class="heading-deco"><div class="heading-line"></div><span>💫</span><div class="heading-line"></div></div>
+  <div class="section-title" style="margin-bottom:8px">Gallery of Smiles 🌷</div>
+  <div class="section-sub" style="margin-bottom:40px">Click any photo to view in full ✨</div>
+  <div id="lightgallery" class="memories-masonry"></div>
+</section>
+
+<div class="wave-div" style="transform:rotate(180deg)"><svg viewBox="0 0 1200 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="#fdf2f8"/></svg></div>
+
+<!-- FINAL -->
+<section class="section" id="final" data-aos="fade-up">
+  <span class="final-heart">💗</span>
+  <div class="name-badge">Meh Devi Ji 🌸</div>
+  <h2 class="final-title">Happy Birthday,<br/>Meh Devi Ji! 🎂💗</h2>
+  <p class="final-sub">May your smile always stay this beautiful.</p>
+  <button class="btn-last-surprise" id="last-surprise-btn">One Last Surprise ✨</button>
+  <div class="divider" style="margin-top:44px">🌸 💗 ✨ 💗 🌸</div>
+  <span class="ldeco" style="top:5%;left:5%;font-size:30px">✨</span>
+  <span class="ldeco" style="top:10%;right:7%;font-size:26px;animation-delay:1s">🌸</span>
+  <span class="ldeco" style="bottom:10%;left:8%;font-size:28px;animation-delay:.5s">💗</span>
+  <span class="ldeco" style="bottom:8%;right:5%;font-size:24px;animation-delay:1.5s">🎀</span>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" data-aos="fade-up">
+  <div class="footer-text">Made with 💗 for the most special girl — Meh Devi Ji 🌸<br/><span style="font-family:var(--fe);font-style:italic;font-size:.9em;color:var(--tl)">“Some people make the world more beautiful just by being in it.”</span></div>
+  <div class="footer-hearts">💗 🌸 💫 🌸 💗</div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery/2.7.1/lightgallery.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
