@@ -1,4 +1,4 @@
-// Photo data - Meh Devi Ji
+// Photo data - Devi Ji
 const photos = [
   {src:'WhatsApp Image 2026-08-26 at 9.13.34 PM (1).jpeg', caption:'That smile 🥹', title:'Photo 1'},
   {src:'WhatsApp Image 2026-08-26 at 9.13.34 PM.jpeg', caption:'Too cute 💗', title:'Photo 2'},
@@ -143,7 +143,7 @@ for (let i = 0; i < 20; i++) {
   (function animate() { ctx.clearRect(0, 0, canvas.width, canvas.height); petals.forEach(p => p.update()); requestAnimationFrame(animate); })();
 })();
 
-// ====== LIVE AGE COUNTER (from Happy-Birthday repo, adapted for Meh Devi Ji) ======
+// ====== LIVE AGE COUNTER (from Happy-Birthday repo, adapted for Devi Ji) ======
 (function initAgeCounter() {
   // Birthday: 7 September (using 2002 as assumed year - adjust if needed)
   const birthDate = new Date('2002-09-07T00:00:00');
