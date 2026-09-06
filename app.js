@@ -427,61 +427,90 @@ document.addEventListener('click', e => { if (e.target.tagName === 'IMG') create
 // MOBILE CURSOR
 if ('ontouchstart' in window) { cursor.style.display = 'none'; cursorTrail.style.display = 'none'; document.body.style.cursor = 'auto'; }
 
-// ====== BACKGROUND AUDIO ======
+// ====== BACKGROUND AUDIO (Mobile-friendly) ======
 const bgAudio = document.getElementById('bg-audio');
 const audioToggle = document.getElementById('audio-toggle');
 let isAudioPlaying = false;
-let audioInit = false;
+let audioStarted = false;
 
-function startAudio() {
-  if (audioInit) return;
-  audioInit = true;
-  
-  bgAudio.volume = 0; // Start at 0 for fade in
-  bgAudio.play().then(() => {
-    isAudioPlaying = true;
-    audioToggle.textContent = '🔊';
-    audioToggle.classList.remove('muted');
-    
-    // Fade in volume slowly
-    let vol = 0;
-    const fadeInt = setInterval(() => {
-      if (vol < 0.6) { // Max volume 0.6
-        vol += 0.05;
-        bgAudio.volume = Math.min(vol, 0.6);
-      } else {
-        clearInterval(fadeInt);
-      }
-    }, 300); // 300ms step
-  }).catch((e) => {
-    // Autoplay blocked
-    console.log('Audio autoplay blocked, requires manual click.');
-    audioToggle.textContent = '🔇';
-    audioToggle.classList.add('muted');
-  });
+// Fade in volume smoothly
+function fadeInAudio() {
+  bgAudio.volume = 0;
+  let vol = 0;
+  const fadeInt = setInterval(() => {
+    vol += 0.04;
+    if (vol >= 0.6) { bgAudio.volume = 0.6; clearInterval(fadeInt); }
+    else { bgAudio.volume = vol; }
+  }, 200);
 }
 
-// Start audio on first interaction
-document.addEventListener('click', startAudio, { once: true });
-document.addEventListener('touchstart', startAudio, { once: true });
-document.addEventListener('scroll', startAudio, { once: true });
+// Try to play audio — must be called from within a real user gesture
+function tryPlayAudio() {
+  if (audioStarted) return;
+  audioStarted = true;
 
+  // Remove the hint banner if present
+  const hint = document.getElementById('music-hint');
+  if (hint) hint.remove();
+
+  bgAudio.volume = 0;
+  const playPromise = bgAudio.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      isAudioPlaying = true;
+      audioToggle.textContent = '🔊';
+      audioToggle.classList.remove('muted');
+      fadeInAudio();
+    }).catch(() => {
+      // Still blocked — leave toggle as 🔇, user can tap it manually
+      audioStarted = false; // allow retry
+      audioToggle.textContent = '🔇';
+      audioToggle.classList.add('muted');
+    });
+  }
+}
+
+// Show a subtle "tap for music" hint on mobile
+if ('ontouchstart' in window) {
+  const hint = document.createElement('div');
+  hint.id = 'music-hint';
+  hint.textContent = '🎵 Tap anywhere for music';
+  hint.style.cssText = 'position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:rgba(255,133,194,0.9);color:#fff;font-family:sans-serif;font-size:13px;padding:7px 16px;border-radius:20px;z-index:99999;pointer-events:none;animation:spulse 1.5s ease-in-out infinite;white-space:nowrap;box-shadow:0 2px 12px rgba(244,114,182,.4)';
+  document.body.appendChild(hint);
+  // Auto-remove after 8 seconds even if no interaction
+  setTimeout(() => { if (hint.parentNode) hint.remove(); }, 8000);
+}
+
+// Listen for first user interaction — works on both mobile & desktop
+['touchstart', 'touchend', 'click', 'keydown'].forEach(evt => {
+  document.addEventListener(evt, function handler(e) {
+    // Don't trigger from audio toggle itself (it has its own handler)
+    if (e.target === audioToggle) return;
+    tryPlayAudio();
+    document.removeEventListener(evt, handler);
+  }, { once: true, passive: true });
+});
+
+// Audio toggle button — always works regardless of autoplay state
 audioToggle.addEventListener('click', (e) => {
-  e.stopPropagation(); // Prevent triggering the document click
-  if (!audioInit) {
-    startAudio();
+  e.stopPropagation();
+
+  if (!audioStarted) {
+    // First tap on the button — start audio directly from this gesture
+    tryPlayAudio();
     return;
   }
-  
+
   if (isAudioPlaying) {
     bgAudio.pause();
     isAudioPlaying = false;
     audioToggle.textContent = '🔇';
     audioToggle.classList.add('muted');
   } else {
-    bgAudio.play();
-    isAudioPlaying = true;
-    audioToggle.textContent = '🔊';
-    audioToggle.classList.remove('muted');
+    bgAudio.play().then(() => {
+      isAudioPlaying = true;
+      audioToggle.textContent = '🔊';
+      audioToggle.classList.remove('muted');
+    });
   }
 });
